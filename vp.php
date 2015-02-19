@@ -1,31 +1,37 @@
 <?php
 /*
 Plugin Name: +PopUp
-Plugin URI: http://maspopup.com
+Plugin URI: http://cleyan.github.io/maspopup/
 Description: PlugIn para cargar PopUp que permiten viralizar tu blog, generar mas Fans en tu página de facebook teniendo multiples temas y full control del contenido y el comportamiento del plugin.
 Author: Carlos Leyan
-Version: 1.0.3
+Version: 2.0.1
 Author URI: http://www.facebook.com/carlosleyan.net
 */
 
-	require_once("funciones.php");
+
+	define("VP_PATH", plugin_dir_path( __FILE__ ));
+	define("VP_URL", plugin_dir_url( __FILE__ ));
+
+	require_once(VP_PATH. "lib/funciones.php");
 
 	function vp_viralpop_list(){
-		include(dirname(__FILE__) . "/vp_list.php");
+		include(VP_PATH . "vp_list.php");
 	}
+
 	function vp_viralpop_add(){
-		include(dirname(__FILE__) . "/vp_add.php");
+		include(VP_PATH . "vp_add.php");
 	}
+
 	function vp_activar(){
-		include(dirname(__FILE__) . "/vp_activar.php");
+		include(VP_PATH . "lib/vp_activar.php");
 	}
 
 	function load_vp_admin_scripts() {
 		wp_enqueue_script(array('jquery', 'editor', 'thickbox', 'media-upload',"wp-ajax-response",'farbtastic'));
 		wp_enqueue_style('thickbox','farbtastic');
-        wp_register_script( 'jscolor', plugins_url() . "/maspopup/jscolor.js");
-        wp_enqueue_script( 'jscolor' );		
-	}	
+        wp_register_script( 'jscolor', VP_URL. "js/jscolor.js");
+        wp_enqueue_script( 'jscolor' );
+	}
 
 	function vp_load_tiny_mce() {
 		wp_tiny_mce( false ); // true gives you a stripped down version of the editor
@@ -79,24 +85,24 @@ Author URI: http://www.facebook.com/carlosleyan.net
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 
-		update_option("vp_apikey","");	
-		update_option("vp_activo","");			
-		
+		update_option("vp_apikey","");
+		update_option("vp_activo","");
+
 	}
 
 	//inicializa
-	register_activation_hook(__FILE__, "vp_inicializa");	
-	add_action("admin_menu","menu_plugin_vp");	
+	register_activation_hook(__FILE__, "vp_inicializa");
+	add_action("admin_menu","menu_plugin_vp");
 
 	add_action("template_redirect", "contenido_vp");
 	add_action('admin_enqueue_scripts', 'load_vp_admin_scripts');
-	add_action("admin_head","vp_load_tiny_mce");	
+	add_action("admin_head","vp_load_tiny_mce");
 	//add_action('admin_print_footer_scripts', 'vp_tiny_mce_preload_dialogs');
-	
+
 	if (isset($_GET['page']) && $_GET['page'] == 'vp_paginas_add') {
 		add_action('admin_print_scripts', 'vp_my_admin_scripts');
 		add_action('admin_print_styles', 'vp_my_admin_styles');
-	}	
-	
-	
+	}
+
+
 ?>

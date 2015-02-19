@@ -1,4 +1,4 @@
-<?php 
+<?php
 	//El usuario tiene permisos?
 	if (!current_user_can('manage_options')){
 	  wp_die('No tiene permisos para acceder a esta página.');
@@ -18,7 +18,7 @@
 			<a href="admin.php?page=vp_paginas">Se ha eliminado La página, volver a la lista de Páginas</a>';
 		  include("pie.php");
 		  echo "</div>";
-		  return true;  
+		  return true;
 	}
 
 $editFormAction = $_SERVER['PHP_SELF'];
@@ -28,7 +28,7 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
 if (CCGetFromPost("MM_update","") == "form1") {
 	global $wpdb;
-	
+
 	if (CCGetFromPost("vp_pagina_id")){
 		//Estoy Editando
 		$ok= $wpdb->update("vp_paginas",array("wp_pagina" => CCGetFromPost("wp_pagina"),
@@ -71,7 +71,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
 												'fb_user_id' => CCGetFromPost('fb_user_id')
 												),
 										array("vp_pagina_id" => CCGetParam('vp_pagina_id')));
-	
+
 	} else {
 		//Estoy Agregando
 		$ok= $wpdb->insert( 'vp_paginas', array( 'wp_pagina' => CCGetFromPost("wp_pagina"),
@@ -114,7 +114,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
 												'fb_user_id' => CCGetFromPost('fb_user_id')
 												));
 	}
-	
+
 
  	if ($ok) {
 	  echo '<div class="wrap">
@@ -128,7 +128,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
 	  <a href="admin.php?page=vp_paginas">Hubo un error Guardado los cambios, volver a la lista de Páginas</a><br>';
 	  $wpdb->print_error();
 	}
-  
+
 	include("pie.php");
 	echo "</div>";
 	return true;
@@ -139,18 +139,18 @@ if (CCGetFromPost("MM_update","") == "form1") {
 		//Obtiene los Datos en Caso de Edicion
 		global $wpdb;
 		$datos = $wpdb->get_row("SELECT * FROM vp_paginas WHERE vp_pagina_id=" . CCGetParam("vp_pagina_id",0) . " LIMIT 1");
-		
+
 		$wp_pagina=$datos->wp_pagina;
-	
-		//Obtiene 
-		$paginas = $wpdb->get_results("SELECT ID, post_name, post_title FROM $wpdb->posts 
-										WHERE post_type='page' 
+
+		//Obtiene
+		$paginas = $wpdb->get_results("SELECT ID, post_name, post_title FROM $wpdb->posts
+										WHERE post_type='page'
 										AND post_status='publish'
 										AND (post_name NOT IN (SELECT wp_pagina FROM vp_paginas) OR post_name ='$wp_pagina')
 										ORDER BY post_name");
-										
-		$num_rows=	$wpdb->get_var("SELECT count(*) FROM $wpdb->posts 
-										WHERE post_type='page' 
+
+		$num_rows=	$wpdb->get_var("SELECT count(*) FROM $wpdb->posts
+										WHERE post_type='page'
 										AND post_status='publish'
 										AND (post_name NOT IN (SELECT wp_pagina FROM vp_paginas) OR post_name ='$wp_pagina')
 										ORDER BY post_name");
@@ -161,19 +161,19 @@ if (CCGetFromPost("MM_update","") == "form1") {
 
 		//Lee las paginas del blog
 
-		$paginas = $wpdb->get_results("SELECT ID, post_name, post_title FROM $wpdb->posts 
-										WHERE post_type='page' 
+		$paginas = $wpdb->get_results("SELECT ID, post_name, post_title FROM $wpdb->posts
+										WHERE post_type='page'
 										AND post_status='publish'
 										AND post_name NOT IN (SELECT wp_pagina FROM vp_paginas)
-										ORDER BY post_name");	
-										
-		$num_rows=	$wpdb->get_var("SELECT count(*) FROM $wpdb->posts 
-										WHERE post_type='page' 
+										ORDER BY post_name");
+
+		$num_rows=	$wpdb->get_var("SELECT count(*) FROM $wpdb->posts
+										WHERE post_type='page'
 										AND post_status='publish'
 										AND post_name NOT IN (SELECT wp_pagina FROM vp_paginas)
-										ORDER BY post_name");	
+										ORDER BY post_name");
 	}
-	
+
 	if (!$num_rows){
 		  echo '<div class="wrap">
 		        <h2><img src="' . MP_ICO32 .'" height="32" border="0" style="vertical-align:middle;"/>Configurar Página de +PopUp</h2>
@@ -181,7 +181,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
 				No hay páginas disponibles para ser usadas por +PopUp, le recomendamos <a href="post-new.php?post_type=page" title="Crear Nueva Página" class="edit">Crear una Nueva...</a> <br>';
 		  return true;
 	}
-	
+
 	$fuentes=array( "Arial"        		 => "Arial",
 					"Hand Of Sean" 		 => "Hand Of Sean",
 					"Impact"	   		 => "Impact",
@@ -189,7 +189,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
 					"Lucida Handwriting" => "Lucida Handwriting",
 					"Tahoma"			 => "Tahoma",
 					"Tekton Pro"		 => "Tekton Pro");
-	
+
 ?>
 <div class="wrap  metabox-holder">
 <h2><img src='<?php echo MP_ICO32; ?>' height='32' border='0' style='vertical-align:middle;'/>Editar Página de +PopUp</h2>
@@ -214,7 +214,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
     <tr class="form-field form-required">
       <th scope="row">Página de WordPress</th>
       <td colspan="6"><select name="wp_pagina" style="min-width:300px;" id="wp_pagina">
-      
+
         <?php
 			foreach ($paginas as $pagg) {
 				$option = '<option value="'.$pagg->post_name.'" ' . (($pagg->post_name == $datos->wp_pagina) ? "selected": "" )  .  ' >';
@@ -222,8 +222,8 @@ if (CCGetFromPost("MM_update","") == "form1") {
 				$option .= '</option>';
 				echo $option;
 			}
-		?>      
-      
+		?>
+
       </select> <a href="post-new.php?post_type=page" title="Crear Nueva Página" class="edit">Nueva...</a><br />
       <em>Página del Blog en la que cargará el +PopUp</em>.</td>
     </tr>
@@ -234,45 +234,45 @@ if (CCGetFromPost("MM_update","") == "form1") {
 <h3>Títulos de la Página</h3>
   <table class="form-table">
 <tr class='form-field'>
-  <th scope='row'>Texto del Pretitulo 
-  <a href="<?php echo plugins_url() ."/maspopup/ayuda.php?ruta=". WP_PLUGIN_URL . "&keepThis=true&TB_iframe=true"; ?>" title="Ayuda para Configurar Páginas de +PopUp" class="thickbox">
+  <th scope='row'>Texto del Pretitulo
+  <a href="<?php echo VP_URL ."ayuda.php?ruta=". WP_PLUGIN_URL . "&keepThis=true&TB_iframe=true"; ?>" title="Ayuda para Configurar Páginas de +PopUp" class="thickbox">
   <img src="<?php echo MP_HELP16; ?>" border="0" style="vertical-align:middle;" />
   </a>
   </th>
   <td colspan="6"><input type='text' value='<?php echo $datos->pretitulo_txt; ?>' name='pretitulo_txt' size='50' id='pretitulo_txt' style="width:100%" />
-    </td> 
+    </td>
 </tr>
 
 <tr class='form-field'>
   <th align="right" scope='row'>&nbsp;</th>
   <td nowrap="nowrap">Fuente</td>
   <td><select name='pretitulo_fuente' id ='pretitulo_fuente' >
-  
-  	<?php 
-	reset($fuentes); 
+
+  	<?php
+	reset($fuentes);
 	foreach ($fuentes as $fuente_val => $fuente_txt){
 	?>
-	
+
     <option value='<?php echo $fuente_val; ?>' <?php echo (($datos->pretitulo_fuente==$fuente_val ? 'selected' : '')); ?> > <?php echo $fuente_txt; ?> </option>
-    
+
     <?php
 	}
 	?>
-  
-  
+
+
   </select></td>
   <td>Color</td>
   <td><input type='text' value='<?php echo ($datos->pretitulo_color)? $datos->pretitulo_color : "2C19D3" ; ?>' id='pretitulo_color' name='pretitulo_color' size='10' maxlength='20' class="color"/></td>
   <td>Tamaño</td>
   <td nowrap="nowrap"><input type='text' value='<?php echo ($datos->pretitulo_size) ? $datos->pretitulo_size : 19; ?>' id='pretitulo_size' name='pretitulo_size' size='4' maxlength='4'/>
-    px</td> 
+    px</td>
 </tr>
 
 <tr class='form-field'>
      <th scope='row'>Texto del Título
      </th>
      <td colspan="7">
-       <textarea name='titulo_txt' cols='50' rows="2" id='titulo_txt'><?php echo $datos->titulo_txt; ?></textarea></th>      
+       <textarea name='titulo_txt' cols='50' rows="2" id='titulo_txt'><?php echo $datos->titulo_txt; ?></textarea></th>
 </tr>
 
 
@@ -280,23 +280,23 @@ if (CCGetFromPost("MM_update","") == "form1") {
   <th align="right" scope='row'>&nbsp;</th>
   <td>Fuente</td>
   <td><select name='titulo_fuente' id ='titulo_fuente' >
-  	<?php 
-	reset($fuentes); 
+  	<?php
+	reset($fuentes);
 	foreach ($fuentes as $fuente_val => $fuente_txt){
 	?>
-	
+
     <option value='<?php echo $fuente_val; ?>' <?php echo (($datos->titulo_fuente==$fuente_val ? 'selected' : '')); ?> > <?php echo $fuente_txt; ?> </option>
-    
+
     <?php
 	}
 	?>
-    
+
   </select></td>
   <td>Color</td>
   <td><input type='text' value='<?php echo ($datos->titulo_color) ? $datos->titulo_color :"D30202"; ?>' id='titulo_color' name='titulo_color' size='10' maxlength='50' class="color"/></td>
   <td>Tamaño</td>
   <td nowrap="nowrap"><input name='titulo_size' type='text' id='titulo_size' value='<?php echo ($datos->titulo_size) ? $datos->titulo_size : "34" ; ?>' size='4' maxlength="4"/>
-    px</td> 
+    px</td>
 </tr>
 
 
@@ -305,19 +305,19 @@ if (CCGetFromPost("MM_update","") == "form1") {
   <th scope='row'>Texto del SubTítulo</th>
   <td colspan="6">
   <input type='text' value='<?php echo $datos->subtitulo_txt; ?>' size='50' name='subtitulo_txt' id='subtitulo_txt' style="width:100%"/>
-    </td> 
+    </td>
 </tr>
 <tr class='form-field'>
   <th align="right" scope='row'>&nbsp;</th>
   <td>Fuente</td>
   <td><select name='subtitulo_fuente' id ='subtitulo_fuente' >
-    	<?php 
-	reset($fuentes); 
+    	<?php
+	reset($fuentes);
 	foreach ($fuentes as $fuente_val => $fuente_txt){
 	?>
-	
+
     <option value='<?php echo $fuente_val; ?>' <?php echo (($datos->subtitulo_fuente==$fuente_val ? 'selected' : '')); ?> > <?php echo $fuente_txt; ?> </option>
-    
+
     <?php
 	}
 	?>
@@ -327,7 +327,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
   <td><input type='text' value='<?php echo ($datos->subtitulo_color) ? $datos->subtitulo_color : "2C19D3"; ?>' id='subtitulo_color' name='subtitulo_color' size='10' maxlength='20' class="color"/></td>
   <td>Tamaño</td>
   <td nowrap="nowrap"><input type='text' value='<?php echo ($datos->subtitulo_size) ? $datos->subtitulo_size : "19"; ?>' id='subtitulo_size' name='subtitulo_size' size='4' maxlength='4'/>
-    px</td> 
+    px</td>
 </tr>
 <tr class='form-field'>
   <th align="right" scope='row'>&nbsp;</th>
@@ -348,7 +348,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
   <td colspan="6">
     <input type='text' value='<?php echo $datos->fanpage_url; ?>' id='fanpage_url' name='fanpage_url' size='50' maxlength='255'/>
     <br />
-    <em>Incluyendo http por ejemplo, http://www.facebook.com/maspopup</em></td> 
+    <em>Incluyendo http por ejemplo, http://www.facebook.com/maspopup</em></td>
 </tr>
 <tr class='form-field'>
   <th scope='row'>&nbsp;</th>
@@ -364,7 +364,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
     <option value='V' <?php echo (($datos->fanpage_caras=='V' ? 'selected' : '')); ?> > Sí </option>
     <option value='F' <?php echo (($datos->fanpage_caras=='F' ? 'selected' : '')); ?> > No </option>
 
-    </select></td> 
+    </select></td>
 </tr>
 <tr class='form-field'>
   <th scope='row'>&nbsp;</th>
@@ -381,7 +381,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
     <option value='F' <?php echo (($datos->fanpage_header=='F' ? 'selected' : '')); ?> > No </option>
     <option value='V' <?php echo (($datos->fanpage_header=='V' ? 'selected' : '')); ?> > Sí </option>
 
-    </select></td> 
+    </select></td>
 </tr>
 <tr class='form-field'>
   <th scope='row'>Incluír Botón Me Gusta</th>
@@ -411,10 +411,10 @@ if (CCGetFromPost("MM_update","") == "form1") {
   <table class="form-table"  style="width:100%;">
 	<tr class='form-field'>
      <td scope='row'>
-  
+
   <div id="postdivrich1" class="postarea">
   	<?php the_editor(stripslashes($datos->texto_libre),"texto_libre","texto_libre"); ?>
-  </div>  
+  </div>
 
   </td>
      </tr>
@@ -431,7 +431,7 @@ if (CCGetFromPost("MM_update","") == "form1") {
      <th scope='row'>Título de la Ventana</th>
      <td colspan="6">
         <input type='text' value='<?php echo $datos->ventana_titulo; ?>' id='ventana_titulo' name='ventana_titulo' size='50' maxlength='255'/>
-    </td> 
+    </td>
 </tr>
 <tr class='form-field'>
   <th scope='row'>&nbsp;</th>
@@ -459,9 +459,9 @@ if (CCGetFromPost("MM_update","") == "form1") {
       <option value='F' <?php echo (($datos->ventana_ajustable=='F' ? 'selected' : '')); ?> >
         No
         </option>
-      </select> 
+      </select>
     ¿Quiere que el vistante pueda ajustar el tamaño de la ventana?
-    </td> 
+    </td>
 </tr>
 <tr class='form-field'>
      <th scope='row'>Tema (aspecto)</th>
@@ -493,28 +493,28 @@ if (CCGetFromPost("MM_update","") == "form1") {
 					 "ui-darkness"=>"UI Darkness",
 					 "ui-lightness"=>"UI Ligthness",
 					 "vader"=>"Vader"
-					 );	
-		        
+					 );
+
         foreach ($temas as $tema_valor => $tema_texto){
 		?>
-        
+
         <option value='<?php echo $tema_valor; ?>' <?php echo (($datos->ventana_tema==$tema_valor ? 'selected' : '')); ?> >
         <?php echo $tema_texto; ?>
         </option>
-        
+
         <?php
 		}
 		?>
-        
-        
-        
-        </select> 
-        <a href="<?php echo plugins_url() ."/maspopup/temas.php?ruta=". WP_PLUGIN_URL . "&keepThis=true&TB_iframe=true"; ?>" title="Vista previa de Temas Para +PopUp" class="thickbox button">
+
+
+
+        </select>
+        <a href="<?php echo VP_URL ."temas.php?ruta=". WP_PLUGIN_URL . "&keepThis=true&TB_iframe=true"; ?>" title="Vista previa de Temas" class="thickbox button">
         Elegir con Vista Previa
         </a>
-        
+
         <br />
-        Aspecto que quiere usar para mostrar el +PopUp</td> 
+        Aspecto que quiere usar para mostrar el +PopUp</td>
 </tr>
 <tr class='form-field'>
   <th scope='row'>Descripción</th>
@@ -527,9 +527,9 @@ if (CCGetFromPost("MM_update","") == "form1") {
   <th scope='row'>URL de miniatura</th>
   <td colspan="6"><em>
     <input type='text' value='<?php echo $datos->ventana_miniatura; ?>' id='ventana_miniatura' name='ventana_miniatura' size='50' maxlength='255'/>
-    
+
     <input id="buscar_miniatura" type="button" value="Buscar" class="button"/>
-    
+
     <br />
     URL de la imágen de miniatura que se muestra al compartir esta página en facebook</em></td>
 </tr>
@@ -546,13 +546,13 @@ if (CCGetFromPost("MM_update","") == "form1") {
   <td colspan="6">
     <input type='text' value='<?php echo $datos->url_destino; ?>' id='url_destino' name='url_destino' size='50' maxlength='255'/>
     <br />
-    <em>Dirección completa, or ejemplo http://www.facebook.com/maspopup</em></td> 
+    <em>Dirección completa, or ejemplo http://www.facebook.com/maspopup</em></td>
 </tr>
 <tr class='form-field'>
      <th scope='row'>Texto del Botón</th>
      <td colspan="6">
         <input type='text' value='<?php echo $datos->boton_txt; ?>' id='boton_txt' name='boton_txt' size='20' maxlength='50'/>
-    </td> 
+    </td>
 </tr>
 
 	</table>
@@ -564,20 +564,20 @@ if (CCGetFromPost("MM_update","") == "form1") {
   <table class="form-table"  style="width:100%;">
 	<tr class='form-field'>
      <td scope='row'>
-       
+
 
     <div id="postdivrich2" class="postarea">
       <?php the_editor(stripslashes($datos->ventana_fondo),"ventana_fondo","ventana_fondo"); ?>
 
       </div>
-   
+
   </td>
      </tr>
 
 </table>
 </div>
 
-    
+
     <p class="submit">
       <input type="submit" value="Grabar los Cambios"  class="button-primary" id="submit" name="submit"/> o <a href="admin.php?page=vp_paginas">Cancelar</a>
       </p>
